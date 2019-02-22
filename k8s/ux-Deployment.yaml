@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthylinkx-ux-deployment
+  labels:
+    app: healthylinkx-ux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: healthylinkx-ux
+  template:
+    metadata:
+      labels:
+        app: healthylinkx-ux
+    spec:        
+      containers:
+      - name: healthylinkx-ux
+        image: react
+        imagePullPolicy: Never 
+        ports:
+        - containerPort: 8081
+        volumeMounts:
+        - name: myapp
+          mountPath: /myapp
+      volumes:
+      - name: myapp
+        hostPath:
+          path: /home/docker/healthylinkx-ux-graphql
+          type: Directory
+     
