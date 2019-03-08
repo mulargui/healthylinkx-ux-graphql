@@ -1,11 +1,9 @@
 import  React, { Component } from 'react'
 import AsyncSelect from 'react-select/lib/Async';
-import { TAXONOMYAPI, PROVIDERSAPI, PARAMSEPARATOR } from '../global'
+import { TAXONOMYAPI, PROVIDERSAPI } from './constants'
 import { UNIVERSE } from '../actions/actiontypes'
 import { SearchDoctors, ErrorMessage } from '../actions/action'
 
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
 
 export class Search extends Component {
 	constructor(props) {
@@ -30,80 +28,48 @@ export class Search extends Component {
 		else this.setState({visible: false})	
 	}
 
-	loadSpecialities(input)  {
+	loadSpecialities(input) {
 		let store = this.props.store
-
-		return fetch(TAXONOMYAPI)
+		return this.props.client.query({query: TAXONOMYAPI})
 			.then(function(response) {
-				if (!response.ok)
-					throw new Error("Bad response from server")
-				return response.json()
+				return response.data.SpecialityList
 			})
 			.then(function(response) {
 				if (!response.length === 0)
 					throw new Error("No taxonomies!")
 				var taxonomyTags = []
 				response.forEach(function(entry) {
-					taxonomyTags.push({ value: entry.Classification, label: entry.Classification })
+					taxonomyTags.push({ value: entry.name, label: entry.name })
 				})
-				return { options: taxonomyTags, complete: true}
+				return taxonomyTags
 			})
 			.catch(function(error) {
 				store.dispatch(ErrorMessage(error.message))
-			})
+			})	
 	}
 	
 	handleClick() {	
-		//let's form the URL to query
-		var requeststring = PROVIDERSAPI
-		var firstparam = true
-
-		if ("" !== this.zipcode.value){
-			if(firstparam) firstparam=false
-			else requeststring+=PARAMSEPARATOR
-			requeststring+="zipcode="
-			requeststring+=this.zipcode.value
-		}
-
-		if ('N' !== this.gender.value){
-			if(firstparam) firstparam=false
-			else requeststring+=PARAMSEPARATOR
-			requeststring+="gender="
-			requeststring+=this.gender.value
-		}
-
-		if ("" !== this.lastname.value){
-			if(firstparam) firstparam=false
-			else requeststring+=PARAMSEPARATOR
-			requeststring+="lastname1="
-			requeststring+=this.lastname.value
-		}
-			
-		if ("undefined" !== typeof this.state.specialty.value){
-			if(firstparam) firstparam=false
-			else requeststring+=PARAMSEPARATOR
-			requeststring+="specialty="
-			requeststring+=this.state.specialty.value
-		}
-	
-		if(firstparam) firstparam=false
-		else requeststring+=PARAMSEPARATOR
-		requeststring+="distance="
-		requeststring+=this.distance.value
 
 		//lets call the api, collect the data and dispath the result to the store
 		let store = this.props.store
 		let specialty = this.state.specialty.value
-		let lastname = this.lastname.value
 		let gender = this.gender.value
 		let zipcode = this.zipcode.value
 		let distance = this.distance.value
+		var lastname = this.lastname.value.trim().split(/ +/)
 		
-		fetch(requeststring)
+		// no speciality selected
+		if (typeof this.state.specialty.value === "undefined")
+			specialty=""
+
+		//no lastname
+		if (lastname[0] === "")
+			lastname = []
+		
+		return this.props.client.query({query: PROVIDERSAPI, variables: {distance: parseInt(distance), postalCode: zipcode,
+			gender: gender, classification: specialty, lastName: lastname}})
 			.then(function(response) {
-				if (!response.ok)
-					throw new Error("Bad response from server")
-				return response.json()
+				return response.data.SearchProviders
 			})
 			.then(function(response) {
 				if (response.length === 0)
@@ -122,8 +88,16 @@ export class Search extends Component {
 				<div className="container">
 					<legend>Providers Search</legend>
 					<div className="row">
-						<AsyncSelect name="form-field-name" onChange={value => this.setState({specialty:value})} value={this.state.specialty}
-							loadOptions={this.loadSpecialities} placeholder="Type a Medical Specialty" />
+						<AsyncSelect 
+							name="form-field-name" 
+							onChange={value => this.setState({specialty:value})} 
+							value={this.state.specialty}
+							defaultOptions
+							cacheOptions
+							isSearchable 
+							loadOptions={this.loadSpecialities} 
+							placeholder="Type a Medical Specialty" 
+						/>
 						<p></p>
 					</div>
 					<div className="row">
@@ -132,7 +106,7 @@ export class Search extends Component {
 					</div>
 					<div className="row">
 						<select className="form-control" ref={(e) => this.gender = e}>
-							<option value="N">No gender preference</option>
+							<option value="">No gender preference</option>
 							<option value="F">Female only</option>
 							<option value="M">Male only</option>
 						</select>

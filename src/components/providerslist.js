@@ -1,5 +1,5 @@
 import  React, { Component } from 'react'
-import { SELECTEDAPI, PARAMSEPARATOR } from '../global'
+import { SELECTEDAPI, PARAMSEPARATOR } from './constants'
 import { LIST } from '../actions/actiontypes'
 import { NewSearch, SelectDoctors, ErrorMessage } from '../actions/action'
 
@@ -118,11 +118,11 @@ export class ProvidersList extends Component {
 					</tr></thead>
 					<tbody> 
 						{this.state.doctorslist.map((entry) => 
-							<tr key={entry.NPI}>
-								<td><input type="checkbox" value={entry.NPI} onChange={this.checkBoxChanged}></input></td>
-								<td>{entry.Provider_Full_Name}</td>
-								<td>{entry.Provider_Full_Street}</td>
-								<td>{entry.Provider_Full_City}</td>
+							<tr key={entry.npi}>
+								<td><input type="checkbox" value={entry.npi} onChange={this.checkBoxChanged}></input></td>
+								<td>{entry.fullName}</td>
+								<td>{entry.fullStreet}</td>
+								<td>{entry.fullCity}</td>
 							</tr>
 						)}
 					</tbody>

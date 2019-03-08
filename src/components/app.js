@@ -1,15 +1,24 @@
 import './app.css'
 
 import React, { Component } from 'react'
-import { configureStore } from '../containers/store'
+
 import { Search } from './search'
 import { Messages } from './messagesbox'
 import { ProvidersList } from './providerslist'
 import { ProvidersShortList } from './providershortlist'
+
+import { configureStore } from '../containers/store'
+
+import ApolloClient from 'apollo-boost'
+import { ENDPOINT } from './constants'
+
 var FontAwesome = require('react-fontawesome')
 
 //create the global store for redux
 let store = configureStore()
+
+//create the apollo client
+const client = new ApolloClient({uri: ENDPOINT});
 
 class Header extends Component {
 	render(){ 
@@ -43,10 +52,10 @@ class App extends Component {
 		return (
 			<div>
 				<Header />
-				<Search store={store}/>		
-				<ProvidersList store={store}/>		
-				<ProvidersShortList store={store}/>		
-				<Messages store={store}/>
+				<Search				store={store} client={client}/>		
+				<ProvidersList		store={store} client={client}/>		
+				<ProvidersShortList store={store} client={client}/>		
+				<Messages 			store={store} client={client}/>
 				<Footer />
 			</div>
 		)
