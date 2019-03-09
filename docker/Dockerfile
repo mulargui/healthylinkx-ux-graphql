@@ -12,8 +12,6 @@ RUN DEBIAN_FRONTEND=noninteractive cd /theapp \
 		react-bootstrap \
 		redux \
 		react-fontawesome \
-		isomorphic-fetch \
-		es6-promise \
 		react-select \
 		# react-redux
 		graphql \

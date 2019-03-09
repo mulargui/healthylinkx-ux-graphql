@@ -10,7 +10,7 @@ import { ProvidersShortList } from './providershortlist'
 import { configureStore } from '../containers/store'
 
 import ApolloClient from 'apollo-boost'
-import { ENDPOINT } from './constants'
+import { ENDPOINT } from '../graphql/constants'
 
 var FontAwesome = require('react-fontawesome')
 
@@ -55,7 +55,7 @@ class App extends Component {
 				<Search				store={store} client={client}/>		
 				<ProvidersList		store={store} client={client}/>		
 				<ProvidersShortList store={store} client={client}/>		
-				<Messages 			store={store} client={client}/>
+				<Messages 			store={store} />
 				<Footer />
 			</div>
 		)

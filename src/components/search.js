@@ -1,9 +1,8 @@
 import  React, { Component } from 'react'
 import AsyncSelect from 'react-select/lib/Async';
-import { TAXONOMYAPI, PROVIDERSAPI } from './constants'
+import { TAXONOMYAPI, PROVIDERSAPI } from '../graphql/constants'
 import { UNIVERSE } from '../actions/actiontypes'
 import { SearchDoctors, ErrorMessage } from '../actions/action'
-
 
 export class Search extends Component {
 	constructor(props) {

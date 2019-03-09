@@ -49,12 +49,12 @@ export class ProvidersShortList extends Component {
 					<tbody>
 					{/* eslint-disable-next-line */}
 						{this.state.shortlist.map((entry) => 
-							<tr key={entry.NPI}>
-								<td>{entry.NPI}</td>
-								<td>{entry.Provider_Full_Name}</td>
-								<td>{entry.Provider_Full_Street}</td>
-								<td>{entry.Provider_Full_City}</td>
-								<td>{entry.Provider_Business_Practice_Location_Address_Telephone_Number}</td>
+							<tr key={entry.npi}>
+								<td>{entry.npi}</td>
+								<td>{entry.fullName}</td>
+								<td>{entry.fullStreet}</td>
+								<td>{entry.fullCity}</td>
+								<td>{entry.telephone}</td>
 							</tr>
 						)}
 						<tr><td>Transaction number: {this.state.transaction} </td></tr>

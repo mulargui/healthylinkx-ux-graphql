@@ -45,8 +45,8 @@ export function myreducer(state = initialState, action) {
 		return Object.assign({}, state, {
 			state: SELECTED
 			, selected: {
-				transaction: action.selected[0].Transaction
-				, shortlist: action.selected[1].slice()
+				transaction: action.selected.id
+				, shortlist: action.selected.providers.slice()
 			}
 			, errorMessage: ''
 		})

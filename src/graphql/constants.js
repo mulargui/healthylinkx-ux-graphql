@@ -5,9 +5,6 @@ const URL = window.location.hostname
 // healthylinkx-api-service port 
 const PORT = '30100'
 
-export const METHODSEPARATOR = '?'
-export const PARAMSEPARATOR = '&'
-
 export const ENDPOINT = 'http://' + URL + ':' + PORT + '/graphql'
 export const TAXONOMYAPI = gql `{SpecialityList {name}}`;
 export const PROVIDERSAPI = gql ` query searchproviders(
@@ -31,4 +28,20 @@ export const PROVIDERSAPI = gql ` query searchproviders(
 		}
 	}
 `;
-export const SELECTEDAPI = URL + ':' + PORT + '/shortlist' 
+export const SELECTEDAPI = gql ` mutation bookproviders(
+		$npi: [String!]!
+	){
+		BookProviders(
+			npi: $npi
+		){
+			id,
+			providers{
+				npi,
+				fullName,
+				fullStreet,
+				fullCity,
+				telephone
+			}
+		}
+	}
+`;

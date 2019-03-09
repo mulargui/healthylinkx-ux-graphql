@@ -1,10 +1,7 @@
 import  React, { Component } from 'react'
-import { SELECTEDAPI, PARAMSEPARATOR } from './constants'
+import { SELECTEDAPI } from '../graphql/constants'
 import { LIST } from '../actions/actiontypes'
 import { NewSearch, SelectDoctors, ErrorMessage } from '../actions/action'
-
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
 
 export class ProvidersList extends Component {
 	constructor(props) {
@@ -48,27 +45,18 @@ export class ProvidersList extends Component {
 			return
 		}
 
-		//let's form the URL to query
-		var requeststring = SELECTEDAPI
-		var firstparam = true
-
+		//get the list of npis selected
+		var npis = []
 		options.map(function(entry, index) {
-			if(firstparam) firstparam=false
-			else requeststring+=PARAMSEPARATOR
-
-			requeststring+="NPI"
-			requeststring+=index+1
-			requeststring+="="
-			requeststring+=entry
+			npis.push(entry.toString());
 		})
 
+		//lets call the api, collect the data and dispath the result to the store
 		let store = this.props.store
 
-		fetch(requeststring)
+		return this.props.client.mutate({mutation: SELECTEDAPI, variables: {npi: npis}})
 			.then(function(response) {
-				if (!response.ok)
-					throw new Error("Bad response from server")
-				return response.json()
+				return response.data.BookProviders
 			})
 			.then(function(response) {
 				if (response.length === 0)
