@@ -1,13 +1,8 @@
-FROM ubuntu:latest
+FROM node:8.15-alpine
 
-# Install node.js, and supplementary programs
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install nodejs npm 
-RUN DEBIAN_FRONTEND=noninteractive npm install -g npm@latest
-RUN DEBIAN_FRONTEND=noninteractive npm install -g npx 
-RUN DEBIAN_FRONTEND=noninteractive npx create-react-app theapp 
-RUN DEBIAN_FRONTEND=noninteractive cd /theapp \
-	&& npm install --save \		
+RUN yarn create react-app theapp 
+RUN cd /theapp \
+	&& yarn add \		
 		bootstrap@3 \
 		react-bootstrap \
 		redux \
@@ -24,4 +19,4 @@ COPY src/ /theapp/src/
 EXPOSE 3000
 
 # By default, simply start the app
-CMD cd /theapp && npm start
+CMD cd /theapp && yarn start
