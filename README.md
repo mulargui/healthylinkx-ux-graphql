@@ -1,9 +1,14 @@
 # healthylinkx-ux-graphql
-Rewrite of the healthylinkx-ux-react to use apollo graphql client and connect to the api in graphql
 
-Healthylinkx is a 3 tiers app: ux, api and datastore. Healthylinkx creates and runs a container for each tier.
+Healthylinkx helps you find doctors with the help of your social network. Think of Healthylinkx as a combination of Yelp, Linkedin and Facebook. 
 
-This repo implements the ux tier in a single page web app using bootstrap and react-redux.
+This is an early prototype that combines open data of doctors and specialists from the US Department of Health. It allows you to search for doctors based on location, specialization, genre or name. You can choose up to three doctors in the result list and Healthylinkx (theoretically) will book appointments for you.
+
+Healthylinx is a classic three tiers app: front-end (ux), service API and data store. It also integrates with a third-party API from RedLine13 (https://www.redline13.com) to find zip codes in an area. Healthylinkx creates and runs a container for each tier.
+
+This architecture makes it very adequate to test different technologies and I use it for getting my hands dirty on new stuff. You might need to combine what is in this repo with other repos if you want to build the app end to end. It is like a lego where you can pick and choose different technologies as you see fit. Enjoy!
+
+This repo implements the ux tier in a single page web app using bootstrap and react-redux. It is a rewrite of the healthylinkx-ux-react to use apollo graphql client and connect to the api in graphql.
 
 Directories:\
 Src. the code of the react-redux app organized in various folders in a quite standard way.\
